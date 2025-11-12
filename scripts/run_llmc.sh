@@ -2,7 +2,7 @@
 
 # export CUDA_VISIBLE_DEVICES=0,1
 
-llmc=/path/to/llmc
+llmc=/home/bruce_ultra/workspace/quant_workspace/Quantizer-Tools/LightCompress
 export PYTHONPATH=$llmc:$PYTHONPATH
 
 task_name=awq_w_only
@@ -36,7 +36,8 @@ torchrun \
 --rdzv_backend c10d \
 --rdzv_endpoint $MASTER_ADDR:$MASTER_PORT \
 ${llmc}/llmc/__main__.py --config $config --task_id $task_id \
-> ${task_name}.log 2>&1 &
+> ${task_name}.log 2> >(tee -a ${task_name}.log >&2) &
+# > ${task_name}.log 2>&1 &
 
 sleep 2
 ps aux | grep '__main__.py' | grep $task_id | awk '{print $2}' > ${task_name}.pid

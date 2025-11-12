@@ -54,7 +54,11 @@ if __name__ == '__main__':
         default=['pileval', 'c4', 'wikitext2', 'ptb', 'ultrachat'],
         nargs='*',
     )
-    parser.add_argument('--save_path', type=str, required=True)
+    
+    parser.add_argument('--save_path', 
+                        type=str, 
+                        # required=True
+                        default="/home/bruce_ultra/workspace/quant_workspace/Quantizer-Tools/_outputs/calibration_dataset/llmc_calib")
     args = parser.parse_args()
     logger.info(f'args : {args}')
     download(args.dataset_name, args.save_path)

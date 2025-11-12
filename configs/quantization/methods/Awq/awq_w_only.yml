@@ -1,14 +1,14 @@
 base:
     seed: &seed 42
 model:
-    type: model_type
-    path: model path
+    type: Llama
+    path: /home/bruce_ultra/data/Meta-Llama-3-8B
     tokenizer_mode: slow
     torch_dtype: auto
 calib:
     name: pileval
     download: False
-    path: calib data path
+    path: /home/bruce_ultra/workspace/quant_workspace/Quantizer-Tools/_outputs/calibration_dataset/llmc_calib/datasets/pileval
     n_samples: 128
     bs: -1
     seq_len: 512
@@ -18,12 +18,12 @@ eval:
     eval_pos: [pretrain, transformed, fake_quant]
     name: wikitext2
     download: False
-    path: eval data path
+    path: /home/bruce_ultra/workspace/quant_workspace/Quantizer-Tools/_outputs/calibration_dataset/llmc_calib/datasets/wikitext2
     seq_len: 2048
     # For 7B / 13B model eval, bs can be set to "1", and inference_per_block can be set to "False".
     # For 70B model eval, bs can be set to "20", and inference_per_block can be set to "True".
     bs: 1
-    inference_per_block: False
+    inference_per_block: True
 quant:
     method: Awq
     weight:
@@ -42,4 +42,4 @@ quant:
 save:
     save_trans: False
     save_fake: False
-    save_path: /path/to/save/
+    save_path: /home/bruce_ultra/workspace/quant_workspace/Quantizer-Tools/_outputs/llm_log/Llama_3_8B_awq_w_only
