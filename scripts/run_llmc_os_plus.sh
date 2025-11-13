@@ -1,14 +1,14 @@
 #!/bin/bash
 
-export CUDA_VISIBLE_DEVICES=0,1
+export CUDA_VISIBLE_DEVICES=2,3
 
 llmc=/mnt/share_disk/LLM_workspace/Quantizer-Tools/LightCompress
 export PYTHONPATH=$llmc:$PYTHONPATH
 
-task_name=awq_w_only
-config=${llmc}/configs/quantization/methods/Awq/awq_w_only.yml
+task_name=osplus_w_a
+config=${llmc}/configs/quantization/methods/OsPlus/osplus_w_a.yml
 
-LOG_DIR="/mnt/share_disk/LLM_workspace/Quantizer-Tools/_output/llm_log/Llama_3_8B_awq_w_only"
+LOG_DIR="/mnt/share_disk/LLM_workspace/Quantizer-Tools/_output/llm_log/Llama_3_8B_osplus_w_a"
 mkdir -p ${LOG_DIR}
 
 nnodes=1

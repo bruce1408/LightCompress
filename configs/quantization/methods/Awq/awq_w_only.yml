@@ -22,7 +22,7 @@ eval:
     seq_len: 2048
     # For 7B / 13B model eval, bs can be set to "1", and inference_per_block can be set to "False".
     # For 70B model eval, bs can be set to "20", and inference_per_block can be set to "True".
-    bs: 1
+    bs: 4
     inference_per_block: False
 quant:
     method: Awq
@@ -42,4 +42,4 @@ quant:
 save:
     save_trans: False
     save_fake: False
-    save_path: /home/bruce_ultra/workspace/quant_workspace/Quantizer-Tools/_outputs/llm_log/Llama_3_8B_awq_w_only
+    save_path: /mnt/share_disk/LLM_workspace/Quantizer-Tools/_output/llm_log/Llama_3_8B_awq_w_only
