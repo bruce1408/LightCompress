@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# export CUDA_VISIBLE_DEVICES=0,1
+export CUDA_VISIBLE_DEVICES=0,1
 
-llmc=/home/bruce_ultra/workspace/quant_workspace/Quantizer-Tools/LightCompress
+llmc=/mnt/share_disk/LLM_workspace/Quantizer-Tools/LightCompress
 export PYTHONPATH=$llmc:$PYTHONPATH
 
 task_name=awq_w_only
 config=${llmc}/configs/quantization/methods/Awq/awq_w_only.yml
 
 nnodes=1
-nproc_per_node=1
+nproc_per_node=2
 
 
 find_unused_port() {
@@ -28,7 +28,7 @@ MASTER_ADDR=127.0.0.1
 MASTER_PORT=$UNUSED_PORT
 task_id=$UNUSED_PORT
 
-nohup \
+# nohup \
 torchrun \
 --nnodes $nnodes \
 --nproc_per_node $nproc_per_node \
@@ -36,7 +36,8 @@ torchrun \
 --rdzv_backend c10d \
 --rdzv_endpoint $MASTER_ADDR:$MASTER_PORT \
 ${llmc}/llmc/__main__.py --config $config --task_id $task_id \
-> ${task_name}.log 2> >(tee -a ${task_name}.log >&2) &
+2>&1 | tee ${task_name}.log
+# > ${task_name}.log 2> >(tee -a ${task_name}.log >&2) &
 # > ${task_name}.log 2>&1 &
 
 sleep 2
