@@ -128,7 +128,15 @@ class OmniQuant(BaseBlockwiseQuantization):
             input_data = self.input['data']
 
         for i in range(len(input_data)):
-            input_data[i] = input_data[i].to(device=next(block.parameters()).device)
+            params = list(block.parameters())
+            if len(params) > 0:
+                # 如果 block 有参数，就使用第一个参数所在的 device
+                target_device = params[0].device
+            else:
+                # 如果 block 没有参数，就默认使用数据当前所在的 device
+                target_device = input_data[i].device
+            input_data[i] = input_data[i].to(device=target_device)
+            # input_data[i] = input_data[i].to(device=next(block.parameters()).device)
             if (
                 'attention_mask' in self.input['kwargs'][i]
                 and self.input['kwargs'][i]['attention_mask'] is not None
