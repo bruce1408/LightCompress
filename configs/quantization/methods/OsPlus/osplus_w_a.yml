@@ -39,4 +39,4 @@ quant:
 save:
     save_trans: False
     save_fake: False
-    save_path: /mnt/share_disk/LLM_workspace/Quantizer-Tools/_output/llm_log/Llama_3_8B_osplus_w_a
+    save_path: /mnt/share_disk/LLM_workspace/Quantizer-Tools/_output/llm_log/Llama_3_8B_osplus_w_a_save
