@@ -1,4 +1,6 @@
 import gc
+import os
+import sys
 
 import torch
 from loguru import logger
@@ -224,27 +226,24 @@ class BaseQuantizer(object):
             for tensor in tensors:
                 tensor = self.reshape_tensor(tensor)
                 tensor_range = self.get_minmax_range(tensor)
-                min_val, max_val = tensor_range[0], tensor_range[1]
+                min_val = tensor_range[0].detach().cpu().to(torch.float32)
+                max_val = tensor_range[1].detach().cpu().to(torch.float32)
 
                 if input_idx not in stats_min_max:
                     stats_min_max[input_idx] = {}
-                    stats_min_max[input_idx]['min'] = torch.tensor(
-                        [min_val], dtype=torch.float32
-                    )
-                    stats_min_max[input_idx]['max'] = torch.tensor(
-                        [max_val], dtype=torch.float32
-                    )
+                    stats_min_max[input_idx]['min'] = min_val.unsqueeze(0)
+                    stats_min_max[input_idx]['max'] = max_val.unsqueeze(0)
                 else:
                     stats_min_max[input_idx]['min'] = torch.cat(
                         [
                             stats_min_max[input_idx]['min'],
-                            torch.tensor([min_val], dtype=torch.float32),
+                            min_val.unsqueeze(0),
                         ]
                     )
                     stats_min_max[input_idx]['max'] = torch.cat(
                         [
                             stats_min_max[input_idx]['max'],
-                            torch.tensor([max_val], dtype=torch.float32),
+                            max_val.unsqueeze(0),
                         ]
                     )
 
@@ -255,8 +254,8 @@ class BaseQuantizer(object):
         stats_min_max = self.get_minmax_stats(act_tensors)
         min_vals, max_vals = [], []
         for input_idx, tensor_range in stats_min_max.items():
-            min_val = tensor_range['min'].mean()
-            max_val = tensor_range['max'].mean()
+            min_val = tensor_range['min'].mean(dim=0)
+            max_val = tensor_range['max'].mean(dim=0)
             min_vals.append(min_val)
             max_vals.append(max_val)
 
@@ -1227,7 +1226,6 @@ class FloatQuantizer(BaseQuantizer):
             f'granularity={self.granularity},'
             f'kwargs={self.kwargs}, qmin={self.qmin}, qmax={self.qmax})'
         )
-
 
 class Weight48IntegerQuantizer(BaseQuantizer):
     # flake8: noqa
