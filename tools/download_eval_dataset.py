@@ -37,9 +37,16 @@ def download(calib_dataset_name, path):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--dataset_name', type=str, default=['c4', 'wikitext2', 'ptb'], nargs='*'
+                        '--dataset_name', 
+                        type=str, 
+                        default=['c4', 'wikitext2', "ptb"], 
+                        nargs='*'
     )
-    parser.add_argument('--save_path', type=str, required=True)
+    parser.add_argument('--save_path', 
+                        type=str,
+                        default="/Users/brucetrie/workspace/LightCompress/datasets" 
+                        # required=True
+                        )
     args = parser.parse_args()
     logger.info(f'args : {args}')
     download(args.dataset_name, args.save_path)
